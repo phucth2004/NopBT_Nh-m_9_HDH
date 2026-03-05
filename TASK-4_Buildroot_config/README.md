@@ -1,5 +1,6 @@
 
 #Quy trình cài đặt Buidroot cho BBB
+
 1.Tổng quan
 Buildroot là framework mã nguồn mở giúp tự động hoá quá trình tạo ra:
 
