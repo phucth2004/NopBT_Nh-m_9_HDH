@@ -1,1 +1,50 @@
+Bài tập 01: Biên dịch ứng dụng với thư viện cJSON
 
+Mục tiêu là tích hợp thư viện bên thứ ba (cJSON) vào hệ điều hành và sử dụng toolchain để biên dịch ứng dụng.
+1. Bật cJSON trong Buildroot
+
+    Truy cập thư mục buildroot của bạn: cd ~/buildroot (hoặc đường dẫn tương ứng).
+
+    Chạy giao diện cấu hình: make menuconfig.
+
+    Tìm theo đường dẫn: Target packages -> Libraries -> JSON and XML -> tích chọn cjson.
+
+    Lưu cấu hình và thực hiện build lại: make. Quá trình này sẽ tải mã nguồn cJSON, biên dịch và đặt file .so/.h vào thư mục output/staging (Sysroot) và output/target.
+
+2. Viết chương trình HelloJSON.c
+
+Tạo một file C đơn giản để parse một chuỗi JSON:
+C
+
+#include <stdio.h>
+#include <cjson/cJSON.h>
+
+int main() {
+    const char *json_string = "{\"name\": \"BBB\", \"version\": 1}";
+    cJSON *json = cJSON_Parse(json_string);
+    if (json == NULL) return 1;
+
+    cJSON *name = cJSON_GetObjectItemCaseSensitive(json, "name");
+    if (cJSON_IsString(name) && (name->valuestring != NULL)) {
+        printf("Device Name: %s\n", name->valuestring);
+    }
+    cJSON_Delete(json);
+    return 0;
+}
+
+3. Biên dịch chéo (Cross-compile)
+
+Sử dụng toolchain của Buildroot. Giả sử toolchain của bạn nằm trong thư mục output:
+Bash
+
+arm-buildroot-linux-uclibcgnueabihf-gcc HelloJSON.c -o HelloJSON -lcjson
+
+    Lưu ý: Nếu compiler không tìm thấy file header, bạn cần trỏ đường dẫn -I và -L đến thư mục staging trong Buildroot.
+
+4. Chạy trên BBB
+
+    Copy file HelloJSON sang BBB qua lệnh scp.
+
+    Cấp quyền thực thi: chmod +x HelloJSON.
+
+    Chạy chương trình: ./HelloJSON.
