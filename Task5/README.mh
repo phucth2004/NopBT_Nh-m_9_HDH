@@ -9,6 +9,7 @@ Mục tiêu là tích hợp thư viện bên thứ ba (cJSON) vào hệ điều 
 
     Tìm theo đường dẫn: Target packages -> Libraries -> JSON and XML -> tích chọn cjson.
 
+
     Lưu cấu hình và thực hiện build lại: make. Quá trình này sẽ tải mã nguồn cJSON, biên dịch và đặt file .so/.h vào thư mục output/staging (Sysroot) và output/target.
 
 2. Viết chương trình HelloJSON.c
